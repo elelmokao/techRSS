@@ -6,7 +6,7 @@ import feedparser
 import pandas as pd
 
 
-def update_hostname_stats(hostname: str, day_windows: int, execute_date: datetime, data: pd.DataFrame, stats_path: str = "../stats") -> None:
+def update_hostname_stats(hostname: str, day_windows: int, execute_date: datetime, data: pd.DataFrame, stats_path: str = "stats") -> None:
     count_log = []
     for day_count in range(day_windows):
         day = execute_date - timedelta(days=day_windows - 1) + timedelta(days=day_count)
@@ -48,7 +48,7 @@ def update_hostname_stats(hostname: str, day_windows: int, execute_date: datetim
         new_data_df.to_csv(csv_file_path, index=False)
 
 
-def update_hostname_stats_csvs(sub_urls: dict[str, str], data: pd.DataFrame, execute_date: datetime, day_windows: int, stats_dir: str = "../stats") -> None:
+def update_hostname_stats_csvs(sub_urls: dict[str, str], data: pd.DataFrame, execute_date: datetime, day_windows: int, stats_dir: str = "stats") -> None:
     """
     Update stats files for each hostname with the count of log entries.
     Creates CSV files if they don't exist, or updates existing ones by overwriting duplicated published_date entries.
@@ -109,6 +109,6 @@ def grep_rss_urls(sub_urls: dict[str, str], output_path: str, day_windows: int) 
 if __name__ == "__main__":
     past_days = 7
     execute_date = datetime.now(timezone.utc).date()
-    sub_urls = load_sub_urls("./subscription.json")
-    data = grep_rss_urls(sub_urls, "../archive/data.csv", past_days)
+    sub_urls = load_sub_urls("src/subscription.json")
+    data = grep_rss_urls(sub_urls, f"archive/{execute_date:%Y-%m-%d}.csv", past_days)
     update_hostname_stats_csvs(sub_urls, data, execute_date, past_days)

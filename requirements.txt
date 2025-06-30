@@ -1,0 +1,8 @@
+feedparser @ file:///home/conda/feedstock_root/build_artifacts/feedparser_1734808041952/work
+numpy @ file:///Users/runner/miniforge3/conda-bld/numpy_1749430543095/work/dist/numpy-2.3.0-cp313-cp313-macosx_11_0_arm64.whl#sha256=c37cf8ede5bfec712fe127413ec1110d494261829f437789017bee6a187e848e
+pandas @ file:///Users/runner/miniforge3/conda-bld/pandas_1749099735861/work
+python-dateutil @ file:///home/conda/feedstock_root/build_artifacts/bld/rattler-build_python-dateutil_1751104122/work
+pytz @ file:///home/conda/feedstock_root/build_artifacts/pytz_1742920838005/work
+sgmllib3k @ file:///home/conda/feedstock_root/build_artifacts/sgmllib3k_1734543040599/work
+six @ file:///home/conda/feedstock_root/build_artifacts/six_1733380938961/work
+tzdata @ file:///home/conda/feedstock_root/build_artifacts/python-tzdata_1742745135198/work
