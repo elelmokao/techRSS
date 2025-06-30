@@ -7,7 +7,7 @@ from matplotlib.colors import ListedColormap
 
 # Load your data
 
-sub_urls = json.load(open("../src/subscription.json"))
+sub_urls = json.load(open("src/subscription.json"))
 
 # GitHub heatmap colors (light to dark)
 
@@ -21,7 +21,7 @@ github_colors = [
 
 sub_urls["total"] = "url"
 for hostname in sub_urls.keys():
-    df = pd.read_csv(f"../stats/{hostname}-2025.csv")
+    df = pd.read_csv(f"stats/{hostname}-2025.csv")
     yearlyrecord = np.zeros(shape=(50 * 7,))
     # iterate through each row in the DataFrame
     for index, row in df.iterrows():
@@ -59,4 +59,4 @@ for hostname in sub_urls.keys():
     ax.yaxis.set_tick_params(length=0, labelbottom=False)
     plt.gca().set_aspect("equal")
     plt.title(f"TechRSS Recent Subscriptions - {hostname}  (2025)", fontsize=16, pad=20)
-    plt.savefig(f"../stats_fig/{hostname}.png", dpi=300, bbox_inches="tight", pad_inches=0.1)
+    plt.savefig(f"stats_fig/{hostname}.png", dpi=300, bbox_inches="tight", pad_inches=0.1)
