@@ -6,6 +6,48 @@ import feedparser
 import pandas as pd
 
 
+def load_sub_urls(file_path: str) -> dict[str, str]:
+    """
+    Load subscription URLs from a JSON file.
+    """
+    with open(file_path, encoding="utf-8") as f:
+        return json.load(f)
+
+
+def grep_rss_urls(sub_urls: dict[str, str], output_path: str, day_windows: int) -> pd.DataFrame:
+    """
+    Load subscription URLs from a JSON file.
+    """
+    logs = []
+    execute_date = datetime.now(timezone.utc).date()
+
+    for hostname, url in sub_urls.items():
+        d = feedparser.parse(url)
+        for entry in d.entries:
+            try:
+                post_date = datetime.fromisoformat(entry.published).astimezone(timezone.utc).date()
+            except ValueError:
+                if "GMT" in entry.published:
+                    post_date = datetime.strptime(entry.published, "%a, %d %b %Y %H:%M:%S %Z").replace(tzinfo=timezone.utc).date()
+                elif "+0000" in entry.published:
+                    post_date = datetime.strptime(entry.published, "%a, %d %b %Y %H:%M:%S %z").date()
+                else:
+                    post_date = datetime(2020, 1, 1, tzinfo=timezone.utc).date()  # Fallback date if parsing fails
+            if post_date < execute_date - timedelta(days=day_windows):
+                continue
+            logs.append(
+                {
+                    "host": hostname,
+                    "published_date": post_date.strftime("%Y-%m-%d"),
+                    "title": entry.title,
+                    "url": entry.link,
+                },
+            )
+    data = pd.DataFrame(logs)
+    data.to_csv(output_path, index=False)
+    return data
+
+
 def update_hostname_stats(hostname: str, day_windows: int, execute_date: datetime, data: pd.DataFrame, stats_path: str = "stats") -> None:
     count_log = []
     for day_count in range(day_windows):
@@ -64,46 +106,37 @@ def update_hostname_stats_csvs(sub_urls: dict[str, str], data: pd.DataFrame, exe
     update_hostname_stats("total", day_windows, execute_date, data, stats_path)
 
 
-def load_sub_urls(file_path: str) -> dict[str, str]:
+def make_markdown_report(data: pd.DataFrame, execute_date: datetime) -> None:
     """
-    Load subscription URLs from a JSON file.
+    Generate a markdown report from a DataFrame with columns: host, published_date, title, url.
+    The report groups entries by host and date, listing article titles as markdown links.
     """
-    with open(file_path, encoding="utf-8") as f:
-        return json.load(f)
+    grouped = {}
+    for _, row in data.iterrows():
+        host = row["host"]
+        date = row["published_date"]
+        if host not in grouped:
+            grouped[host] = {}
+        if date not in grouped[host]:
+            grouped[host][date] = []
+        grouped[host][date].append((row["title"], row["url"]))
 
-
-def grep_rss_urls(sub_urls: dict[str, str], output_path: str, day_windows: int) -> pd.DataFrame:
-    """
-    Load subscription URLs from a JSON file.
-    """
-    logs = []
-    execute_date = datetime.now(timezone.utc).date()
-
-    for hostname, url in sub_urls.items():
-        d = feedparser.parse(url)
-        for entry in d.entries:
-            try:
-                post_date = datetime.fromisoformat(entry.published).astimezone(timezone.utc).date()
-            except ValueError:
-                if "GMT" in entry.published:
-                    post_date = datetime.strptime(entry.published, "%a, %d %b %Y %H:%M:%S %Z").replace(tzinfo=timezone.utc).date()
-                elif "+0000" in entry.published:
-                    post_date = datetime.strptime(entry.published, "%a, %d %b %Y %H:%M:%S %z").date()
-                else:
-                    post_date = datetime(2020, 1, 1, tzinfo=timezone.utc).date()  # Fallback date if parsing fails
-            if post_date < execute_date - timedelta(days=day_windows):
-                continue
-            logs.append(
-                {
-                    "host": hostname,
-                    "published_date": post_date.strftime("%Y-%m-%d"),
-                    "title": entry.title,
-                    "url": entry.link,
-                },
-            )
-    data = pd.DataFrame(logs)
-    data.to_csv(output_path, index=False)
-    return data
+    lines = [f"# Weekly Report: {execute_date - timedelta(days=6):%Y%m%d} - {execute_date:%Y%m%d}\n"]
+    for date in sorted({d for host_dates in grouped.values() for d in host_dates}, reverse=True):
+        lines.append(f"## {date}\n")
+        for host in sorted(grouped):
+            if date in grouped[host]:
+                lines.append(f"### {host}\n")
+                for title, url in grouped[host][date]:
+                    lines.append(f"- [{title}]({url})")
+                lines.append("")
+    markdown_content = "\n".join(lines)
+    # Write markdown to archive/{execute_date}.md
+    archive_dir = Path("archive")
+    archive_dir.mkdir(exist_ok=True)
+    markdown_path = archive_dir / f"{execute_date}.md"
+    with open(markdown_path, "w", encoding="utf-8") as f:
+        f.write(markdown_content)
 
 
 if __name__ == "__main__":
@@ -111,4 +144,5 @@ if __name__ == "__main__":
     execute_date = datetime.now(timezone.utc).date()
     sub_urls = load_sub_urls("src/subscription.json")
     data = grep_rss_urls(sub_urls, f"archive/{execute_date:%Y-%m-%d}.csv", past_days)
+    make_markdown_report(data, execute_date)
     update_hostname_stats_csvs(sub_urls, data, execute_date, past_days)
