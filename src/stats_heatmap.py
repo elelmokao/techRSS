@@ -35,8 +35,8 @@ for hostname in sub_urls.keys():
     img = ax.matshow(data_2d, aspect="auto", cmap=ListedColormap(github_colors), vmin=0, vmax=4)
     ax.grid(color="white", lw=2, clip_on=False)
     ax.set_yticks([-0.5 + i for i in range(7)])
-    # Add single-letter day labels on the left side (T W T F S S M)
-    day_letters = ["Tue", "Wed", "Thu", "Fri", "Sat", "Sun", "Mon"]
+    # Add single-letter day labels on the left side (M T W T F S S)
+    day_letters = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"]
     for i, letter in enumerate(day_letters):
         ax.text(
             -1.5,
