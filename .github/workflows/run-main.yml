@@ -5,10 +5,9 @@ on:
     - cron: "0 0 * * 1" # At 00:00 on Monday
   workflow_dispatch:
 
-authentication:
-  permissions:
-    contents: write # Required to push changes back to the repository
-    actions: read # Required to read the workflow run context
+permissions:
+  contents: write # Required to push changes back to the repository
+  actions: read # Required to read the workflow run context
 
 jobs:
   run-main:
