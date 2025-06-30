@@ -131,7 +131,7 @@ def make_markdown_report(data: pd.DataFrame, execute_date: datetime) -> None:
     # Write markdown to archive/{execute_date}.md
     archive_dir = Path("archive")
     archive_dir.mkdir(exist_ok=True)
-    markdown_path = archive_dir / f"{execute_date}.md"
+    markdown_path = archive_dir / f"{execute_date + timedelta(days=1):%Y-%m-%d}.md"
     with open(markdown_path, "w", encoding="utf-8") as f:
         f.write(markdown_content)
 
