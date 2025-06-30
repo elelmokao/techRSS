@@ -138,7 +138,7 @@ def make_markdown_report(data: pd.DataFrame, execute_date: datetime) -> None:
 
 if __name__ == "__main__":
     past_days = 7
-    execute_date = datetime.now(timezone.utc).date() - timedelta(days=past_days - 1)
+    execute_date = datetime.now(timezone.utc).date() - timedelta(days=1)
     sub_urls = load_sub_urls("src/subscription.json")
     data = grep_rss_urls(sub_urls, past_days, execute_date)
     make_markdown_report(data, execute_date)
