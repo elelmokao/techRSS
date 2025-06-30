@@ -14,7 +14,7 @@ def load_sub_urls(file_path: str) -> dict[str, str]:
         return json.load(f)
 
 
-def grep_rss_urls(sub_urls: dict[str, str], output_path: str, day_windows: int) -> pd.DataFrame:
+def grep_rss_urls(sub_urls: dict[str, str], day_windows: int) -> pd.DataFrame:
     """
     Load subscription URLs from a JSON file.
     """
@@ -43,9 +43,7 @@ def grep_rss_urls(sub_urls: dict[str, str], output_path: str, day_windows: int) 
                     "url": entry.link,
                 },
             )
-    data = pd.DataFrame(logs)
-    data.to_csv(output_path, index=False)
-    return data
+    return pd.DataFrame(logs)
 
 
 def update_hostname_stats(hostname: str, day_windows: int, execute_date: datetime, data: pd.DataFrame, stats_path: str = "stats") -> None:
@@ -143,6 +141,6 @@ if __name__ == "__main__":
     past_days = 7
     execute_date = datetime.now(timezone.utc).date()
     sub_urls = load_sub_urls("src/subscription.json")
-    data = grep_rss_urls(sub_urls, f"archive/{execute_date:%Y-%m-%d}.csv", past_days)
+    data = grep_rss_urls(sub_urls, past_days)
     make_markdown_report(data, execute_date)
     update_hostname_stats_csvs(sub_urls, data, execute_date, past_days)
