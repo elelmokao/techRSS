@@ -23,6 +23,8 @@ Lastest Post: [{NEW_POST}](https://github.com/kao-fu/techRSS/blob/main/archive/{
 - To change archive or stats behavior, modify `src/main.py`.
 
 ## HeatMap
+### Total
+![Total HeatMap](https://github.com/kao-fu/techRSS/blob/main/stats_fig/total.png)
 ### AWS
 ![AWS HeatMap](https://github.com/kao-fu/techRSS/blob/main/stats_fig/AWS.png)
 ### AWS_Architecture
