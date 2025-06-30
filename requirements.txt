@@ -9,3 +9,4 @@ sgmllib3k==1.0.0
 six==1.17.0
 tzdata==2025.2
 wheel==0.45.1
+matplotlib==3.10.3
