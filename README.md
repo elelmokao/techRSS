@@ -1,13 +1,13 @@
 # TechRSS
 
 TechRSS aggregates techical blog posts using RSS feeds and updates at every Monday.
+
 Lastest Post: [2025-06-30](https://github.com/kao-fu/techRSS/blob/main/archive/2025-06-30.md)
 
 ## Features
 
 - Aggregate RSS feeds from multiple sources
 - Archive daily content in CSV and Markdown formats
-- Generate statistics and insights from collected data
 - Easily configurable via JSON subscription files
 
 ## Project Structure
