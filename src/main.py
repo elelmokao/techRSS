@@ -45,7 +45,7 @@ def grep_rss_urls(sub_urls: dict[str, str], day_windows: int, execute_date: date
     return pd.DataFrame(logs)
 
 
-def update_hostname_stats(hostname: str, day_windows: int, execute_date: datetime, data: pd.DataFrame, stats_path: str = "stats") -> None:
+def update_hostname_stats(hostname: str, day_windows: int, execute_date: datetime, data: pd.DataFrame, stats_path: Path = Path("stats")) -> None:
     count_log = []
     for day_count in range(day_windows):
         day = execute_date - timedelta(days=day_windows - 1) + timedelta(days=day_count)
@@ -87,7 +87,7 @@ def update_hostname_stats(hostname: str, day_windows: int, execute_date: datetim
         new_data_df.to_csv(csv_file_path, index=False)
 
 
-def update_hostname_stats_csvs(sub_urls: dict[str, str], data: pd.DataFrame, execute_date: datetime, day_windows: int, stats_dir: str = "stats") -> None:
+def update_hostname_stats_csvs(sub_urls: dict[str, str], data: pd.DataFrame, execute_date: datetime, day_windows: int, stats_dir: Path = Path("stats")) -> None:
     """
     Update stats files for each hostname with the count of log entries.
     Creates CSV files if they don't exist, or updates existing ones by overwriting duplicated published_date entries.
@@ -135,6 +135,18 @@ def make_markdown_report(data: pd.DataFrame, execute_date: datetime) -> None:
     with open(markdown_path, "w", encoding="utf-8") as f:
         f.write(markdown_content)
 
+def update_readme_md_report(sub_urls: dict[str, str]) -> None:
+    """
+    Update the markdown report with the latest data.
+    This function is called at the end of the script to ensure the report is always up-to-date.
+    """
+    readme_md = Path("src/README.template")
+    insert_contents = []
+    for hostname in sub_urls.keys():
+        insert_contents.append(f"###{hostname}")
+        insert_contents.append(f"![{hostname} HeatMap](https://github.com/kao-fu/techRSS/blob/main/stats_fig/{hostname}.png)")
+    with open(readme_md, "r", encoding="utf-8") as f:
+        f.write("\n".join(insert_contents))
 
 if __name__ == "__main__":
     past_days = 7
@@ -143,3 +155,4 @@ if __name__ == "__main__":
     data = grep_rss_urls(sub_urls, past_days, execute_date)
     make_markdown_report(data, execute_date)
     update_hostname_stats_csvs(sub_urls, data, execute_date, past_days)
+    update_readme_md_report(sub_urls)
