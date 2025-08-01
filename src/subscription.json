@@ -1,7 +1,6 @@
 {
     "AWS": "https://aws.amazon.com/blogs/aws/feed/",
     "AWS_Architecture": "https://aws.amazon.com/tw/blogs/architecture/feed/",
-    "AWS_Serverlessland": "https://serverlessland.com/feed.xml",
     "Cloudflare": "https://blog.cloudflare.com/rss",
     "Discord": "https://discord.com/blog/rss.xml",
     "Docker": "https://www.docker.com/feed/",

@@ -135,6 +135,7 @@ def make_markdown_report(data: pd.DataFrame, execute_date: datetime) -> None:
     with open(markdown_path, "w", encoding="utf-8") as f:
         f.write(markdown_content)
 
+
 def update_readme_md_report(sub_urls: dict[str, str]) -> None:
     """
     Update the markdown report with the latest data.
@@ -142,11 +143,12 @@ def update_readme_md_report(sub_urls: dict[str, str]) -> None:
     """
     readme_md = Path("src/README.template")
     insert_contents = []
-    for hostname in sub_urls.keys():
+    for hostname in sub_urls:
         insert_contents.append(f"###{hostname}")
         insert_contents.append(f"![{hostname} HeatMap](https://github.com/kao-fu/techRSS/blob/main/stats_fig/{hostname}.png)")
-    with open(readme_md, "r", encoding="utf-8") as f:
+    with open(readme_md, encoding="utf-8") as f:
         f.write("\n".join(insert_contents))
+
 
 if __name__ == "__main__":
     past_days = 7
