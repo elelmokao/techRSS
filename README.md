@@ -2,7 +2,7 @@
 
 TechRSS aggregates techical blog posts using RSS feeds and updates at every Monday.
 
-Lastest Post: [2025-10-20](https://github.com/kao-fu/techRSS/blob/main/archive/2025-10-20.md)
+Lastest Post: [2025-10-27](https://github.com/kao-fu/techRSS/blob/main/archive/2025-10-27.md)
 
 ## Features
 
