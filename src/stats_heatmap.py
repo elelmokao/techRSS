@@ -21,7 +21,7 @@ github_colors = [
 
 sub_urls["total"] = "url"
 for hostname in sub_urls.keys():
-    df = pd.read_csv(f"stats/{hostname}-2025.csv")
+    df = pd.read_csv(f"stats/{hostname}-2026.csv")
     yearlyrecord = np.zeros(shape=(50 * 7,))
     # iterate through each row in the DataFrame
     for index, row in df.iterrows():
