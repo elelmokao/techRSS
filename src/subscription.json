@@ -20,5 +20,6 @@
     "ByteByteGo": "https://blog.bytebytego.com/feed",
     "Meta": "https://engineering.fb.com/feed/",
     "Meta_AI": "https://engineering.fb.com/feed/",
-    "StackOverflow": "https://stackoverflow.blog/feed"
+    "StackOverflow": "https://stackoverflow.blog/feed",
+    "Joho_no_Todai_English": "https://joho-todai.com/en/rss/"
 }
